@@ -20,7 +20,8 @@ var SPAM_DEPTH_MAX = 12     // How deep to search for transactions to approve (m
 var IRI_PORT       = 14265  // Must match your port configuration for iri process
 var TESTNET = true;        // Set to true only if you are using testnet.
 
-var TIMER_INTERVAL = 700     // The msec interval between spammer wake-up
+var SYNC_THESHOLD = 10        // how far behind can a spamming node fall from latest milestone
+var TIMER_INTERVAL = 1000     // The msec interval between spammer wake-up
 
 // -------- end of configrable part ------
 
@@ -247,7 +248,7 @@ function onMyTimer() {
             var milestone = s.latestMilestone;
             var solidMilestone = s.latestSolidSubtangleMilestone;
             current_milestone_idx = s.latestMilestoneIndex;
-            if (milestone == allnine || solidMilestone == allnine  || s.latestSolidSubtangleMilestoneIndex < s.latestMilestoneIndex ) {
+            if (milestone == allnine || solidMilestone == allnine  || s.latestSolidSubtangleMilestoneIndex + SYNC_THESHOLD < s.latestMilestoneIndex ) {
                 console.log("*INFO  Waiting for synchronization with network. Latest milestone idx: "+current_milestone_idx+". Latest solid milestone idx: "+s.latestSolidSubtangleMilestoneIndex);
                 iri_is_synced = false;
                 lock = false;
